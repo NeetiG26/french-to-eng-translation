@@ -6,8 +6,9 @@ from src.features.utils import timeSince
 # from src.visualization.visualize import showPlot
 
 
-def train_epoch(dataloader, encoder, decoder, encoder_optimizer,
-decoder_optimizer, criterion):
+def train_epoch(dataloader, encoder,
+                decoder, encoder_optimizer,
+                decoder_optimizer, criterion):
 
     total_loss = 0
     for data in dataloader:
@@ -37,11 +38,12 @@ def train(train_dataloader, encoder, decoder, n_epochs, learning_rate=0.001,
 print_every=100, plot_every=100):
     start = time.time()
     plot_losses = []
-    print_loss_total = 0 # Reset every print_every
-    plot_loss_total = 0 # Reset every plot_every
+    print_loss_total = 0  # Reset every print_every
+    plot_loss_total = 0  # Reset every plot_every
 
     encoder_optimizer = optim.Adam(encoder.parameters(), lr=learning_rate)
     decoder_optimizer = optim.Adam(decoder.parameters(), lr=learning_rate)
+    # The negative log likelihood loss
     criterion = nn.NLLLoss()
 
     for epoch in range(1, n_epochs + 1):
@@ -52,12 +54,12 @@ print_every=100, plot_every=100):
         if epoch % print_every == 0:
             print_loss_avg = print_loss_total / print_every
             print_loss_total = 0
-            print('%s (%d %d%%) %.4f' % (timeSince(start, epoch / n_epochs),
-            epoch, epoch / n_epochs * 100, print_loss_avg))
+            print('%s %d %.4f' % (timeSince(start, epoch / n_epochs),
+                  epoch, print_loss_avg))
 
-        # if epoch % plot_every == 0:
-        #     plot_loss_avg = plot_loss_total / plot_every
-        #     plot_losses.append(plot_loss_avg)
-        #     plot_loss_total = 0
+        if epoch % plot_every == 0:
+            plot_loss_avg = plot_loss_total / plot_every
+            plot_losses.append(plot_loss_avg)
+            plot_loss_total = 0
 
     # showPlot(plot_losses)
